@@ -1,6 +1,0 @@
-{
-    "java.project.sourcePaths": [
-        "client\\src",
-        "server\\src"
-    ]
-}
