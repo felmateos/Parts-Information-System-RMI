@@ -8,7 +8,7 @@ public class Client {
 
             PartRepository repo = (PartRepository) remoteRegistry.lookup("repo");
 
-            System.out.println(repo.getName());
+            System.out.println(repo.getName()+"a");
 
             //Part actualPart = repo.getPartByCode(1);
 
