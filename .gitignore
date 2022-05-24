@@ -1,3 +1,2 @@
-.vscode/*
-client/.vscode/*
-server/.vscode/*
+.vscode/**/*
+!.vscode/settings.json
