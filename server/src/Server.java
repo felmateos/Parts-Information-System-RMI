@@ -20,7 +20,7 @@ public class Server {
 
             registry.bind("repo", stub);
 
-            System.out.println("ta funfando");
+            System.out.println("servidor ta funfando");
 
         } catch (Exception e) {
             System.out.println("ERRO NO SERVIDOR:\n" + e.toString());
