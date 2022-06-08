@@ -1,9 +1,12 @@
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.*;
 
-interface Part {
+interface Part extends Remote{
 
-    int getPartCode();
-    String getPartName();
-    String getPartDesc();
-    List<PartQuant> getSubParts();
+    int getPartCode() throws RemoteException;
+    String getPartName() throws RemoteException;
+    String getPartDesc() throws RemoteException;
+    List<PartQuant> getSubParts() throws RemoteException;
+    Remote exportPeca() throws RemoteException;
 }

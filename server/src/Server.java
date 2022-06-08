@@ -5,16 +5,11 @@ import java.rmi.server.UnicastRemoteObject;
 public class Server {
     public static void main(String[] args) {
         try {
-
-            System.out.println("U bixo ta vino mlk");
-
             PartRepositoryImpl repo = new PartRepositoryImpl("repo");
 
-            repoTeste(repo);
+            repoSample(repo);
 
-            System.out.println(repo.getPartByCode(1).getPartName());
-
-            PartRepository stub = (PartRepository) UnicastRemoteObject.exportObject(repo, 0);
+            PartRepository stub = (PartRepository) UnicastRemoteObject.exportObject(repo, 1);
 
             Registry registry = LocateRegistry.createRegistry(5005);
 
@@ -27,7 +22,7 @@ public class Server {
         }
     }
 
-    static void repoTeste(PartRepository repo) {
+    static void repoSample(PartRepository repo) {
         try {
             repo.insertPart(new PartImpl(1, "peca 1", "eh uma peca", null));
             repo.insertPart(new PartImpl(2, "peca 2", "eh uma peca", null));

@@ -1,3 +1,4 @@
+import java.rmi.RemoteException;
 import java.util.List;
 
 public class PartImpl implements Part{
@@ -7,7 +8,7 @@ public class PartImpl implements Part{
     String partDesc;
     List<PartQuant> subParts;
 
-    PartImpl(int partCode, String partName, String partDesc, List<PartQuant> subParts) {
+    PartImpl(int partCode, String partName, String partDesc, List<PartQuant> subParts) throws RemoteException{
         this.partCode = partCode;
         this.partName = partName;
         this.partDesc = partDesc;
@@ -15,23 +16,23 @@ public class PartImpl implements Part{
     }
 
     @Override
-    public int getPartCode() {
+    public int getPartCode() throws RemoteException{
         return partCode;
     }
 
     @Override
-    public String getPartName() {
+    public String getPartName() throws RemoteException{
         return partName;
     }
 
     @Override
-    public String getPartDesc() {
+    public String getPartDesc() throws RemoteException{
         return partDesc;
     }
 
     @Override
-    public List<PartQuant> getSubParts() {
+    public List<PartQuant> getSubParts() throws RemoteException{
         return subParts;
     }
-    
+
 }
