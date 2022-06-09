@@ -7,8 +7,7 @@ import java.util.List;
 public class PartRepositoryImpl implements PartRepository{
 
     List<Part> allParts = new LinkedList<>();
-    Part exportedPart1 = null;
-    Part exportedPart2 = null;
+    Part exportedPart = null;
 
     String name;
 
@@ -23,26 +22,17 @@ public class PartRepositoryImpl implements PartRepository{
 
     @Override
     public Remote getPartByCode(int partCode) throws RemoteException {
-        if (partCode == 1) {
-            System.out.println("1a");
-            if (exportedPart2 != null) {
-                System.out.println("1b");
-                //UnicastRemoteObject.unexportObject(exportedPart2, true);
-                exportedPart2 = null;
+        if (exportedPart != null && exportedPart.getPartCode() == partCode) return exportedPart;
+        for (Part p : allParts) {
+            if(p.getPartCode() == partCode) {
+                try {
+                    if (exportedPart != null) exportedPart.unexport();
+                    exportedPart = (Part) UnicastRemoteObject.exportObject(p, 10);
+                } catch (RemoteException re) {
+                    System.out.println(re);
+                }
+                return exportedPart;
             }
-            exportedPart1 = (Part) UnicastRemoteObject.exportObject(allParts.get(partCode-1), 10);
-            System.out.println("1c");
-            return exportedPart1;
-        } else if(partCode == 2) {
-            System.out.println("2a");
-            if (exportedPart1 != null) {
-                System.out.println("2b");
-                
-                exportedPart1 = null;
-            }
-            exportedPart2 = (Part) UnicastRemoteObject.exportObject(allParts.get(partCode-1), 10);
-            System.out.println("2c");
-            return exportedPart2;
         }
         return null;
     }

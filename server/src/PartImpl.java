@@ -1,4 +1,5 @@
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 public class PartImpl implements Part{
@@ -33,6 +34,11 @@ public class PartImpl implements Part{
     @Override
     public List<PartQuant> getSubParts() throws RemoteException{
         return subParts;
+    }
+
+    @Override
+    public boolean unexport() throws RemoteException {
+        return UnicastRemoteObject.unexportObject(this, true);
     }
 
 }

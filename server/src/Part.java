@@ -8,4 +8,6 @@ interface Part extends Remote{
     String getPartName() throws RemoteException;
     String getPartDesc() throws RemoteException;
     List<PartQuant> getSubParts() throws RemoteException;
+
+    boolean unexport() throws RemoteException;
 }

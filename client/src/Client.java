@@ -10,13 +10,13 @@ public class Client {
 
             System.out.println(repo.getName());
 
-            Part current_part = (Part) repo.getPartByCode(1);
+            Part currentPart = (Part) repo.getPartByCode(1);
 
-            System.out.println(current_part.getPartCode());
+            System.out.println(currentPart.getPartCode());
 
-            current_part = (Part) repo.getPartByCode(2);
+            currentPart = (Part) repo.getPartByCode(2);
 
-            System.out.println(current_part.getPartCode());
+            System.out.println(currentPart.getPartCode());
 
             //System.out.println(actualPart.getPartName());
             
