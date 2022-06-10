@@ -1,30 +1,53 @@
 import java.rmi.registry.*;
 
 public class Client {
+
+    private static Part currentPart = null;
+    private static PartRepository currentRepo = null;
+    private static int PartQuantCurrentRepo = 0;
+
     public static void main(String[] args) {
+
+        callServer("repo1", "127.0.0.1", 5001);
+        showParts();
+
+
+        System.out.println("\n/////////////////////////////////\n");
+
+
+        callServer("repo2", "127.0.0.1", 5002);
+        showParts();
+        
+    }
+
+    private static void callServer(String repoName, String host, int port) {
         try {
             
-            Registry remoteRegistry = LocateRegistry.getRegistry("127.0.0.1", 5005);
-
-            PartRepository repo = (PartRepository) remoteRegistry.lookup("repo");
-
-            System.out.println(repo.getName());
-
-            Part currentPart = (Part) repo.getPartByCode(1);
-
-            System.out.println(currentPart.getPartCode());
-
-            currentPart = (Part) repo.getPartByCode(2);
-
-            System.out.println(currentPart.getPartCode());
-
-            //System.out.println(actualPart.getPartName());
+            Registry remoteRegistry = LocateRegistry.getRegistry(host, port);
+            currentRepo = (PartRepository) remoteRegistry.lookup(repoName);
+            System.out.println(currentRepo.getName());
+            PartQuantCurrentRepo = currentRepo.getPartsQuant();
             
-            //sugestao devolver uma lista com as info da peca
-            //System.out.println(repo.getPartByCode(1).getPartName());
+        } catch (Exception e) {
+            System.out.println("ERRO NO CLIENTE:\n" + e.toString());
+        }
+    }
+
+    private static void showParts() {
+        try {
+            int i = currentRepo.getName().contains("1") ? 1 : 5;
+            int l = i + PartQuantCurrentRepo;
+            for (; i < l; i++) {
+                currentPart = (Part) currentRepo.getPartByCode(i);
+                System.out.println(currentPart.getPartCode());
+            }
+            currentRepo.insertPart(i, "peca "+i, "eh uma peca", null);
+            currentPart = (Part) currentRepo.getPartByCode(i);
+            System.out.println(currentPart.getPartCode());
 
         } catch (Exception e) {
             System.out.println("ERRO NO CLIENTE:\n" + e.toString());
         }
     }
+
 }

@@ -2,7 +2,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
-public class PartImpl implements Part{
+public class PartImpl implements Part {
 
     int partCode;
     String partName;

@@ -4,7 +4,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PartRepositoryImpl implements PartRepository{
+public class PartRepositoryImpl implements PartRepository {
 
     List<Part> allParts = new LinkedList<>();
     Part exportedPart = null;
@@ -16,8 +16,8 @@ public class PartRepositoryImpl implements PartRepository{
     }
 
     @Override
-    public void insertPart(Part part) throws RemoteException{
-        allParts.add(part);
+    public boolean insertPart(int partCode, String partName, String partDesc, List<PartQuant> subParts) throws RemoteException{
+        return allParts.add(new PartImpl(partCode, partName, partDesc, subParts));
     }
 
     @Override
@@ -28,9 +28,7 @@ public class PartRepositoryImpl implements PartRepository{
                 try {
                     if (exportedPart != null) exportedPart.unexport();
                     exportedPart = (Part) UnicastRemoteObject.exportObject(p, 10);
-                } catch (RemoteException re) {
-                    System.out.println(re);
-                }
+                } catch (RemoteException re) { System.out.println(re); }
                 return exportedPart;
             }
         }
@@ -40,6 +38,11 @@ public class PartRepositoryImpl implements PartRepository{
     @Override
     public List<Part> getAllParts() throws RemoteException {
         return allParts;
+    }
+
+    @Override
+    public int getPartsQuant() throws RemoteException {
+        return allParts.size();
     }
 
     @Override

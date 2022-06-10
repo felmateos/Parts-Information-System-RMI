@@ -5,15 +5,17 @@ import java.rmi.server.UnicastRemoteObject;
 public class Server {
     public static void main(String[] args) {
         try {
-            PartRepositoryImpl repo = new PartRepositoryImpl("repo");
+            PartRepositoryImpl repo1 = new PartRepositoryImpl("repo1");
+            repoSample(repo1, 1);
+            PartRepository stub1 = (PartRepository) UnicastRemoteObject.exportObject(repo1, 1);
+            Registry registry1 = LocateRegistry.createRegistry(5001);
+            registry1.bind("repo1", stub1);
 
-            repoSample(repo);
-
-            PartRepository stub = (PartRepository) UnicastRemoteObject.exportObject(repo, 1);
-
-            Registry registry = LocateRegistry.createRegistry(5005);
-
-            registry.bind("repo", stub);
+            PartRepositoryImpl repo2 = new PartRepositoryImpl("repo2");
+            repoSample(repo2, 5);
+            PartRepository stub2 = (PartRepository) UnicastRemoteObject.exportObject(repo2, 2);
+            Registry registry2 = LocateRegistry.createRegistry(5002);
+            registry2.bind("repo2", stub2);
 
             System.out.println("servidor ta funfando");
 
@@ -22,11 +24,11 @@ public class Server {
         }
     }
 
-    static void repoSample(PartRepository repo) {
+    static void repoSample(PartRepository repo, int i) {
         try {
-            repo.insertPart(new PartImpl(1, "peca 1", "eh uma peca", null));
-            repo.insertPart(new PartImpl(2, "peca 2", "eh uma peca", null));
-            repo.insertPart(new PartImpl(3, "peca 3", "eh uma peca", null));
+            repo.insertPart(i+0, "peca "+(i+0), "eh uma peca", null);
+            repo.insertPart(i+1, "peca "+(i+1), "eh uma peca", null);
+            repo.insertPart(i+2, "peca "+(i+2), "eh uma peca", null);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

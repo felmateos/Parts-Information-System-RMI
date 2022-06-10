@@ -2,12 +2,12 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-public interface PartRepository extends Remote{
+public interface PartRepository extends Remote {
     
-    void insertPart(Part part) throws RemoteException;
+    boolean insertPart(int partCode, String partName, String partDesc, List<PartQuant> subParts) throws RemoteException;
     Remote getPartByCode(int partCode) throws RemoteException;
     List<Part> getAllParts() throws RemoteException;
-
+    int getPartsQuant() throws RemoteException;
 
     // Apenas para testes (remover dps)
     String getName() throws RemoteException;

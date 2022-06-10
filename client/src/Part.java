@@ -2,7 +2,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.*;
 
-interface Part extends Remote{
+interface Part extends Remote {
 
     int getPartCode() throws RemoteException;
     String getPartName() throws RemoteException;
