@@ -6,18 +6,17 @@ import java.util.List;
 
 public class PartRepositoryImpl implements PartRepository {
 
-    List<Part> allParts = new LinkedList<>();
-    Part exportedPart = null;
-
-    String name;
+    private List<Part> allParts = new LinkedList<>();
+    private Part exportedPart = null;
+    private String name;
 
     PartRepositoryImpl(String name) throws RemoteException{
         this.name = name;
     }
 
     @Override
-    public boolean insertPart(int partCode, String partName, String partDesc, List<PartQuant> subParts) throws RemoteException{
-        return allParts.add(new PartImpl(partCode, partName, partDesc, subParts));
+    public boolean insertPart(int partCode, String partName, String partDesc, String repoName, List<PartQuant> subParts) throws RemoteException{
+        return allParts.add(new PartImpl(partCode, partName, partDesc, repoName, subParts));
     }
 
     @Override

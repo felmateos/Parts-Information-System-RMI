@@ -12,7 +12,7 @@ public class Client {
         showParts();
 
 
-        System.out.println("\n/////////////////////////////////\n");
+        System.out.println("\n///////////////////////////////////////////////////////////////////////////\n");
 
 
         callServer("repo2", "127.0.0.1", 5002);
@@ -37,13 +37,14 @@ public class Client {
         try {
             int i = currentRepo.getName().contains("1") ? 1 : 5;
             int l = i + PartQuantCurrentRepo;
+            System.out.println("Codigo | Nome |  Descricao  | Repositorio | SubPecas");
             for (; i < l; i++) {
                 currentPart = (Part) currentRepo.getPartByCode(i);
-                System.out.println(currentPart.getPartCode());
+                System.out.println(currentPart.printInfo());
             }
-            currentRepo.insertPart(i, "peca "+i, "eh uma peca", null);
+            currentRepo.insertPart(i, "peca "+i, "eh uma peca", currentRepo.getName(), null);
             currentPart = (Part) currentRepo.getPartByCode(i);
-            System.out.println(currentPart.getPartCode());
+            System.out.println(currentPart.printInfo());
 
         } catch (Exception e) {
             System.out.println("ERRO NO CLIENTE:\n" + e.toString());

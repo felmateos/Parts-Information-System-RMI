@@ -26,9 +26,9 @@ public class Server {
 
     static void repoSample(PartRepository repo, int i) {
         try {
-            repo.insertPart(i+0, "peca "+(i+0), "eh uma peca", null);
-            repo.insertPart(i+1, "peca "+(i+1), "eh uma peca", null);
-            repo.insertPart(i+2, "peca "+(i+2), "eh uma peca", null);
+            repo.insertPart(i+0, "peca "+(i+0), "eh uma peca", repo.getName(), null);
+            repo.insertPart(i+1, "peca "+(i+1), "eh uma peca", repo.getName(), null);
+            repo.insertPart(i+2, "peca "+(i+2), "eh uma peca", repo.getName(), null);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
