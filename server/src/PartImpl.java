@@ -1,5 +1,7 @@
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.LinkedList;
 import java.util.List;
 
 public class PartImpl implements Part {
@@ -8,7 +10,7 @@ public class PartImpl implements Part {
     private String partName;
     private String partDesc;
     private String repoName;
-    private List<PartQuant> subParts;
+    private List<PartQuant> subParts = new LinkedList<>();
 
     PartImpl(int partCode, String partName, String partDesc, String repoName, List<PartQuant> subParts) throws RemoteException{
         this.partCode = partCode;
@@ -16,6 +18,13 @@ public class PartImpl implements Part {
         this.partDesc = partDesc;
         this.repoName = repoName;
         this.subParts = subParts;
+    }
+
+    PartImpl(int partCode, String partName, String partDesc, String repoName) throws RemoteException{
+        this.partCode = partCode;
+        this.partName = partName;
+        this.partDesc = partDesc;
+        this.repoName = repoName;
     }
 
     @Override
@@ -39,8 +48,19 @@ public class PartImpl implements Part {
     }
 
     @Override
-    public List<PartQuant> getSubParts() throws RemoteException{
-        return subParts;
+    public Remote getSubParts() throws RemoteException{
+        return UnicastRemoteObject.exportObject((Remote) this.subParts, 100);
+    }
+
+    public boolean setSubParts(List<PartQuant>  subParts) throws RemoteException {
+        try {
+            this.subParts = subParts;
+            return true;
+        } catch (Exception e) { return false; }
+    }
+
+    public Remote getSubPart(int index) throws RemoteException {
+        return UnicastRemoteObject.exportObject(this.subParts.get(index), 100);
     }
 
     @Override
@@ -54,7 +74,7 @@ public class PartImpl implements Part {
                 "   |" + this.partName + 
                 "| " + this.partDesc + 
                 " |    " + this.repoName +
-                "    |   null");
+                "    | " + this.subParts);
     }
 
 }

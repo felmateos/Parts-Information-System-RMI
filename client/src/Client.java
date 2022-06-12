@@ -34,6 +34,10 @@ public class Client {
     }
 
     private static void showParts() {
+        /*  Fazer um metodo de getSubPart() em Part 
+         *  e iterar ele para cada SubPart segundo um int SubPartQuant
+         *  Exibir cada SubPart retornada em cada chamada de metodo.
+         */
         try {
             int i = currentRepo.getName().contains("1") ? 1 : 5;
             int l = i + PartQuantCurrentRepo;
@@ -42,7 +46,7 @@ public class Client {
                 currentPart = (Part) currentRepo.getPartByCode(i);
                 System.out.println(currentPart.printInfo());
             }
-            currentRepo.insertPart(i, "peca "+i, "eh uma peca", currentRepo.getName(), null);
+            currentRepo.insertPart(i, "peca "+i, "eh uma peca", currentRepo.getName());
             currentPart = (Part) currentRepo.getPartByCode(i);
             System.out.println(currentPart.printInfo());
 

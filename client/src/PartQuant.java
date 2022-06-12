@@ -1,18 +1,9 @@
-public class PartQuant {
-    
-    private Part part;
-    private int quant;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-    PartQuant(Part part, int quant) {
-        this.part = part;
-        this.quant = quant;
-    }
+interface PartQuant extends Remote {
 
-    public Part getPart() {
-        return part;
-    }
+    Part getPart() throws RemoteException;
 
-    public int getQuant() {
-        return quant;
-    }
+    int getQuant() throws RemoteException;
 }

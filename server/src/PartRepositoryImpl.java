@@ -20,6 +20,11 @@ public class PartRepositoryImpl implements PartRepository {
     }
 
     @Override
+    public boolean insertPart(int partCode, String partName, String partDesc, String repoName) throws RemoteException{
+        return allParts.add(new PartImpl(partCode, partName, partDesc, repoName));
+    }
+
+    @Override
     public Remote getPartByCode(int partCode) throws RemoteException {
         if (exportedPart != null && exportedPart.getPartCode() == partCode) return exportedPart;
         for (Part p : allParts) {
@@ -34,6 +39,8 @@ public class PartRepositoryImpl implements PartRepository {
         return null;
     }
 
+
+    //serializa Part p dar certo
     @Override
     public List<Part> getAllParts() throws RemoteException {
         return allParts;

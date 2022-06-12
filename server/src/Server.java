@@ -1,6 +1,8 @@
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Server {
     public static void main(String[] args) {
@@ -26,9 +28,17 @@ public class Server {
 
     static void repoSample(PartRepository repo, int i) {
         try {
-            repo.insertPart(i+0, "peca "+(i+0), "eh uma peca", repo.getName(), null);
-            repo.insertPart(i+1, "peca "+(i+1), "eh uma peca", repo.getName(), null);
-            repo.insertPart(i+2, "peca "+(i+2), "eh uma peca", repo.getName(), null);
+            repo.insertPart(i+0, "peca "+(i+0), "eh uma peca", repo.getName());
+            repo.insertPart(i+1, "peca "+(i+1), "eh uma peca", repo.getName());
+            repo.insertPart(i+2, "peca "+(i+2), "eh uma peca", repo.getName());
+
+            List<PartQuant> subs = new LinkedList<>();
+
+            subs.add(new PartQuantImpl((Part) repo.getPartByCode(i+1), 1));
+            subs.add(new PartQuantImpl((Part) repo.getPartByCode(i+2), 1));
+
+            ((Part) repo.getPartByCode(i+0)).setSubParts(subs);
+
         } catch (RemoteException e) {
             e.printStackTrace();
         }
