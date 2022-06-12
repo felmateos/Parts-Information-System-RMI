@@ -34,10 +34,10 @@ public class Server {
 
             List<PartQuant> subs = new LinkedList<>();
 
-            subs.add(new PartQuantImpl((Part) repo.getPartByCode(i+1), 1));
-            subs.add(new PartQuantImpl((Part) repo.getPartByCode(i+2), 1));
+            subs.add(new PartQuantImpl((Part) repo.getAllParts().get(1), 1));
+            subs.add(new PartQuantImpl((Part) repo.getAllParts().get(2), 1));
 
-            ((Part) repo.getPartByCode(i+0)).setSubParts(subs);
+            ((Part) repo.getAllParts().get(0)).setSubParts(subs);
 
         } catch (RemoteException e) {
             e.printStackTrace();

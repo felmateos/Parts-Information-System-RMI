@@ -1,10 +1,11 @@
+import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PartImpl implements Part {
+public class PartImpl implements Part, Serializable {
 
     private int partCode;
     private String partName;
@@ -70,11 +71,15 @@ public class PartImpl implements Part {
 
     @Override
     public String printInfo() throws RemoteException {
+        String subParts = "";
+        for (PartQuant pq : this.subParts) {
+            subParts += "[" +pq.getPart().getPartCode() + "," + pq.getQuant() + "] ";
+        }
         return ("   " + this.partCode + 
                 "   |" + this.partName + 
                 "| " + this.partDesc + 
                 " |    " + this.repoName +
-                "    | " + this.subParts);
+                "    | " + subParts);
     }
 
 }

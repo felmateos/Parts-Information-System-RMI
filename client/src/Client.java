@@ -41,7 +41,7 @@ public class Client {
         try {
             int i = currentRepo.getName().contains("1") ? 1 : 5;
             int l = i + PartQuantCurrentRepo;
-            System.out.println("Codigo | Nome |  Descricao  | Repositorio | SubPecas");
+            System.out.println("Codigo | Nome |  Descricao  | Repositorio | SubPecas [Cod,Quant]");
             for (; i < l; i++) {
                 currentPart = (Part) currentRepo.getPartByCode(i);
                 System.out.println(currentPart.printInfo());
