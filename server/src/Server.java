@@ -1,3 +1,4 @@
+import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
 import java.rmi.server.UnicastRemoteObject;
@@ -7,27 +8,30 @@ import java.util.List;
 public class Server {
     public static void main(String[] args) {
         try {
+
             PartRepositoryImpl repo1 = new PartRepositoryImpl("repo1");
             repoSample(repo1, 1);
-            PartRepository stub1 = (PartRepository) UnicastRemoteObject.exportObject(repo1, 1);
-            Registry registry1 = LocateRegistry.createRegistry(5001);
-            registry1.bind("repo1", stub1);
+            initRepo(repo1);
 
             PartRepositoryImpl repo2 = new PartRepositoryImpl("repo2");
             repoSample(repo2, 5);
-            PartRepository stub2 = (PartRepository) UnicastRemoteObject.exportObject(repo2, 2);
-            Registry registry2 = LocateRegistry.createRegistry(5002);
-            registry2.bind("repo2", stub2);
+            initRepo(repo2);
 
             System.out.println("servidor ta funfando");
 
-        } catch (Exception e) {
-            System.out.println("ERRO NO SERVIDOR:\n" + e.toString());
-        }
+        } catch (Exception e) { System.out.println("ERRO NO SERVIDOR:\n" + e.toString()); }
     }
 
-    static void repoSample(PartRepository repo, int i) {
+    private static void initRepo(PartRepository repo) throws RemoteException, AlreadyBoundException{
+        int c = repo.getName().contains("1") ? 1 : 2;
+        PartRepository stub = (PartRepository) UnicastRemoteObject.exportObject(repo, c);
+        Registry registry = LocateRegistry.createRegistry(5000+c);
+        registry.bind("repo" + c, stub);
+    }
+
+    private static void repoSample(PartRepository repo, int i) {
         try {
+
             repo.insertPart(i+0, "peca "+(i+0), "eh uma peca", repo.getName());
             repo.insertPart(i+1, "peca "+(i+1), "eh uma peca", repo.getName());
             repo.insertPart(i+2, "peca "+(i+2), "eh uma peca", repo.getName());
@@ -39,8 +43,6 @@ public class Server {
 
             ((Part) repo.getAllParts().get(0)).setSubParts(subs);
 
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        } catch (RemoteException e) { e.printStackTrace(); }
     }
 }

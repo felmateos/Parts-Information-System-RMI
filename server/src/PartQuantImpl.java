@@ -1,7 +1,6 @@
-import java.io.Serializable;
 import java.rmi.RemoteException;
 
-public class PartQuantImpl implements PartQuant, Serializable {
+public class PartQuantImpl implements PartQuant {
 
     private Part part;
     private int quant;

@@ -10,22 +10,22 @@ public class PartRepositoryImpl implements PartRepository {
     private Part exportedPart = null;
     private String name;
 
-    PartRepositoryImpl(String name) throws RemoteException{
+    PartRepositoryImpl(String name) throws RemoteException {
         this.name = name;
     }
 
-    @Override
-    public boolean insertPart(int partCode, String partName, String partDesc, String repoName, List<PartQuant> subParts) throws RemoteException{
-        return allParts.add(new PartImpl(partCode, partName, partDesc, repoName, subParts));
-    }
-
-    @Override
-    public boolean insertPart(int partCode, String partName, String partDesc, String repoName) throws RemoteException{
+    public boolean insertPart(int partCode, String partName, String partDesc, String repoName) throws RemoteException {
         return allParts.add(new PartImpl(partCode, partName, partDesc, repoName));
     }
 
-    @Override
-    public Remote getPartByCode(int partCode) throws RemoteException {
+    public int[] getAllPartsCodes() throws RemoteException{
+        int[] b = new int[this.allParts.size()];
+        for (int i = 0; i < this.allParts.size(); i++)
+            b[i] = this.allParts.get(i).getPartCode();
+        return b;
+    }
+
+    public Remote getPartRemoteByCode(int partCode) throws RemoteException {
         if (exportedPart != null && exportedPart.getPartCode() == partCode) return exportedPart;
         for (Part p : allParts) {
             if(p.getPartCode() == partCode) {
@@ -41,17 +41,14 @@ public class PartRepositoryImpl implements PartRepository {
 
 
     //serializa Part p dar certo
-    @Override
     public List<Part> getAllParts() throws RemoteException {
         return allParts;
     }
 
-    @Override
     public int getPartsQuant() throws RemoteException {
         return allParts.size();
     }
 
-    @Override
     public String getName() throws RemoteException {
         return name;
     }

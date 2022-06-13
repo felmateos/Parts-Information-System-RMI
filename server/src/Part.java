@@ -8,9 +8,15 @@ interface Part extends Remote {
     String getPartName() throws RemoteException;
     String getPartDesc() throws RemoteException;
     String getRepoName() throws RemoteException;
-    Remote getSubParts() throws RemoteException;
+
+    Remote getSubPartsRemote() throws RemoteException;
     boolean setSubParts(List<PartQuant> subParts) throws RemoteException;
-    Remote getSubPart(int index) throws RemoteException;
+    boolean addSubPart(Part part, int quant) throws RemoteException;
+
+    Remote getSubPartRemote(int index) throws RemoteException;
+
     boolean unexport() throws RemoteException;
-    String printInfo() throws RemoteException;
+
+    String getInfo() throws RemoteException;
+
 }
