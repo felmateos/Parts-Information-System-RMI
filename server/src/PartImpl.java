@@ -1,7 +1,6 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.LinkedList;
 import java.util.List;
 
 public class PartImpl implements Part {
@@ -35,6 +34,10 @@ public class PartImpl implements Part {
         return repoName;
     }
 
+    public Remote createPartQuantRemote(int quant) throws RemoteException {
+        return UnicastRemoteObject.exportObject(new PartQuantImpl(this, quant), 1001);
+    }
+
     public Remote getSubPartsRemote() throws RemoteException {
         return UnicastRemoteObject.exportObject((Remote) this.subParts, 1000);
     }
@@ -44,11 +47,6 @@ public class PartImpl implements Part {
             this.subParts = subParts;
             return true;
         } catch (Exception e) { return false; }
-    }
-
-    public boolean addSubPart(Part part, int quant) {
-        if (this.subParts == null) new LinkedList<>();
-        return this.subParts.add(new PartQuantImpl(part, quant));
     }
 
     public Remote getSubPartRemote(int index) throws RemoteException {
@@ -63,7 +61,7 @@ public class PartImpl implements Part {
         String subParts = "";
         if (this.subParts != null) {
             for (PartQuant pq : this.subParts) {
-                subParts += "[" +pq.getPart().getPartCode() + "," + pq.getQuant() + "] ";
+                subParts += "[" +pq.getPart().getPartCode() + "," + pq.getPart().getRepoName() + "," + pq.getQuant() + "] ";
             }
         }
         return ("   " + this.partCode + 
