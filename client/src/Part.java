@@ -11,12 +11,10 @@ interface Part extends Remote, Serializable {
     String getRepoName() throws RemoteException;
 
     Remote createPartQuantRemote(int quant) throws RemoteException;
-    Remote getSubPartsRemote() throws RemoteException;
+
     boolean setSubParts(List<PartQuant> subParts) throws RemoteException;
 
-    Remote getSubPartRemote(int index) throws RemoteException;
-
-    boolean unexport() throws RemoteException;
+    boolean unexportPart() throws RemoteException;
 
     String getInfo() throws RemoteException;
 

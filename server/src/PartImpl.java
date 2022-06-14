@@ -10,6 +10,7 @@ public class PartImpl implements Part {
     private String partDesc;
     private String repoName;
     private List<PartQuant> subParts;
+    private boolean running = false;
 
     PartImpl(int partCode, String partName, String partDesc, String repoName) throws RemoteException {
         this.partCode = partCode;
@@ -35,11 +36,11 @@ public class PartImpl implements Part {
     }
 
     public Remote createPartQuantRemote(int quant) throws RemoteException {
-        return UnicastRemoteObject.exportObject(new PartQuantImpl(this, quant), 1001);
-    }
-
-    public Remote getSubPartsRemote() throws RemoteException {
-        return UnicastRemoteObject.exportObject((Remote) this.subParts, 1000);
+        waitQueue();
+        running = true;
+        Remote r = UnicastRemoteObject.exportObject(new PartQuantImpl(this, quant), 1000);
+        running = false;
+        return r;
     }
 
     public boolean setSubParts(List<PartQuant>  subParts) {
@@ -49,26 +50,33 @@ public class PartImpl implements Part {
         } catch (Exception e) { return false; }
     }
 
-    public Remote getSubPartRemote(int index) throws RemoteException {
-        return UnicastRemoteObject.exportObject(this.subParts.get(index), 100);
-    }
-
-    public boolean unexport() throws RemoteException {
-        return UnicastRemoteObject.unexportObject(this, true);
+    public boolean unexportPart() throws RemoteException {
+        waitQueue();
+        running = true;
+        boolean r = UnicastRemoteObject.unexportObject(this, true);
+        running = false;
+        return r;
     }
 
     public String getInfo() throws RemoteException {
+        waitQueue();
+        running = true;
         String subParts = "";
         if (this.subParts != null) {
             for (PartQuant pq : this.subParts) {
                 subParts += "[" +pq.getPart().getPartCode() + "," + pq.getPart().getRepoName() + "," + pq.getQuant() + "] ";
             }
         }
+        running = false;
         return ("   " + this.partCode + 
                 "   |" + this.partName + 
                 "| " + this.partDesc + 
                 " |    " + this.repoName +
                 "    | " + subParts);
+    }
+
+    private void waitQueue() {
+        while(running);
     }
 
 }

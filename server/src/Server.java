@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Server {
+
     public static void main(String[] args) {
         try {
 
@@ -25,7 +26,7 @@ public class Server {
     private static void initRepo(PartRepository repo) throws RemoteException, AlreadyBoundException{
         int c = repo.getName().contains("1") ? 1 : 2;
         PartRepository stub = (PartRepository) UnicastRemoteObject.exportObject(repo, c);
-        Registry registry = LocateRegistry.createRegistry(5000+c);
+        Registry registry = LocateRegistry.createRegistry(4000+c);
         registry.bind("repo" + c, stub);
     }
 
