@@ -2,6 +2,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
+import java.util.UUID;
 
 public class PartImpl implements Part {
 
@@ -12,11 +13,12 @@ public class PartImpl implements Part {
     private List<PartQuant> subParts;
     private boolean running = false;
 
-    PartImpl(int partCode, String partName, String partDesc, String repoName) throws RemoteException {
-        this.partCode = partCode;
+    PartImpl(String partName, String partDesc, String repoName, List<PartQuant> subParts) throws RemoteException {
+        this.partCode = generateUniqueId();
         this.partName = partName;
         this.partDesc = partDesc;
         this.repoName = repoName;
+        this.subParts = subParts;
     }
 
     public int getPartCode() throws RemoteException {
@@ -43,11 +45,9 @@ public class PartImpl implements Part {
         return r;
     }
 
-    public boolean setSubParts(List<PartQuant>  subParts) {
-        try {
-            this.subParts = subParts;
-            return true;
-        } catch (Exception e) { return false; }
+    public boolean setSubParts(List<PartQuant> subParts) {
+        this.subParts = subParts;
+        return true;
     }
 
     public boolean unexportPart() throws RemoteException {
@@ -73,6 +73,16 @@ public class PartImpl implements Part {
                 "| " + this.partDesc + 
                 " |    " + this.repoName +
                 "    | " + subParts);
+    }
+
+    public static int generateUniqueId() throws RemoteException{      
+        UUID idOne = UUID.randomUUID();
+        String str=""+idOne;        
+        Integer uid=str.hashCode();
+        String filterStr=""+uid;
+        str=filterStr.replaceAll("-", "");
+        uid = Integer.parseInt(str);
+        return (uid >= 0 && uid < 9999999) ? uid : generateUniqueId();
     }
 
     private void waitQueue() {

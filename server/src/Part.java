@@ -17,5 +17,4 @@ interface Part extends Remote, Serializable {
     boolean unexportPart() throws RemoteException;
 
     String getInfo() throws RemoteException;
-
 }

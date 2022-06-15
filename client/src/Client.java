@@ -1,4 +1,3 @@
-import java.net.SocketTimeoutException;
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
 import java.util.LinkedList;
@@ -15,7 +14,7 @@ public class Client {
     private static boolean running = false;
 
     public enum actions {
-        HELP, BIND, LISTP, QUIT;
+        HELP, BIND, LISTP, GETP, SHOWP, CLIST, ADDSUBP, ADDP, QUIT;
     }
 
     public static void main(String[] args) throws RemoteException {
@@ -39,10 +38,15 @@ public class Client {
                 actions chosenAction = actions.valueOf(actionSplit[0].toUpperCase());
                 
                 switch (chosenAction) {
-                    case HELP  -> help();
-                    case BIND  -> bind(actionSplit[1], Integer.parseInt(actionSplit[2]));
-                    case LISTP -> listp();
-                    case QUIT  -> running = false;
+                    case HELP    -> help();
+                    case BIND    -> bind(actionSplit[1], Integer.parseInt(actionSplit[2]));
+                    case LISTP   -> listp();
+                    case GETP    -> getp(Integer.parseInt(actionSplit[1]));
+                    case SHOWP   -> showp();
+                    case CLIST   -> clearList();
+                    case ADDSUBP -> addSubPart(Integer.parseInt(actionSplit[1]));
+                    case ADDP    -> addPart(actionSplit[1], actionSplit[2]);
+                    case QUIT    -> running = false;
                 }
             } catch (IllegalArgumentException iae) {
                 System.out.println("Comando invalido!");
@@ -67,18 +71,40 @@ public class Client {
         }
     }
 
-    private static void listp() throws RemoteException{
+    private static void listp() throws RemoteException {
         System.out.println("\nInfos de todas as pecas: ");
         System.out.println("Codigo | Nome |  Descricao  | Repositorio | SubPecas [Cod,Repo,Quant]");
         for (int partCode : currentRepo.getAllPartsCodes())
             System.out.println(((Part) currentRepo.getPartRemoteByCode(partCode)).getInfo());
     }
 
+    private static void getp(int partCode) throws RemoteException {
+        currentPart = (Part) currentRepo.getPartRemoteByCode(partCode);
+    }
+
+    private static void showp() throws RemoteException {
+        System.out.println("\nInfos da peca escolhida: ");
+        System.out.println("Codigo | Nome |  Descricao  | Repositorio | SubPecas [Cod,Repo,Quant]");
+        System.out.println(currentPart.getInfo());
+    }
+
+    private static void clearList() {
+        currentSubPartsList.clear();
+    }
+
+    private static void addSubPart(int quant) throws RemoteException {
+        currentSubPartsList.add((PartQuant) currentPart.createPartQuantRemote(quant));
+    }
+
+    private static void addPart(String partName, String partDesc) throws RemoteException{
+        currentRepo.insertPart(partName, partDesc, currentRepo.getName(), currentSubPartsList);
+    }
+
     private static void teste() throws RemoteException{
         bind("repo1", 4001);
         System.out.println("Nome do repositório: " + currentRepo.getName());
 
-        currentPart = (Part) currentRepo.getPartRemoteByCode(1);
+        currentPart = (Part) currentRepo.getPartRemoteByCode(currentRepo.getAllPartsCodes()[0]);
         System.out.println("\nInfos da peca escolhida: ");
         System.out.println("Codigo | Nome |  Descricao  | Repositorio | SubPecas [Cod,Repo,Quant]");
         System.out.println(currentPart.getInfo());
@@ -89,7 +115,7 @@ public class Client {
             System.out.println(((Part) currentRepo.getPartRemoteByCode(partCode)).getInfo());
         
         System.out.println("\nAdicionando uma nova peca.");
-        currentRepo.insertPart(8, "peca 8", "eh uma peca", "repo1");
+        currentRepo.insertPart("peca a", "eh uma peca", "repo1", null);
 
         System.out.println("\nInfos de todas as pecas: ");
         System.out.println("Codigo | Nome |  Descricao  | Repositorio | SubPecas [Cod,Repo,Quant]");
@@ -103,7 +129,7 @@ public class Client {
 
         currentSubPartsList.add((PartQuant) currentPart.createPartQuantRemote(8));
 
-        currentPart = (Part) currentRepo.getPartRemoteByCode(2);
+        currentPart = (Part) currentRepo.getPartRemoteByCode(currentRepo.getAllPartsCodes()[1]);
 
         currentPart.setSubParts(currentSubPartsList);
         System.out.println("\nInfos da peca escolhida: ");
@@ -125,14 +151,14 @@ public class Client {
             System.out.println(((Part) currentRepo.getPartRemoteByCode(partCode)).getInfo());
 
         System.out.println("\nAdicionando uma nova peca.");
-        currentRepo.insertPart(9, "peca 9", "eh uma peca", "repo2");
+        currentRepo.insertPart("peca b", "eh uma peca", "repo2", null);
 
         System.out.println("\nInfos de todas as pecas: ");
         System.out.println("Codigo | Nome |  Descricao  | Repositorio | SubPecas [Cod,Repo,Quant]");
         for (int partCode : currentRepo.getAllPartsCodes())
             System.out.println(((Part) currentRepo.getPartRemoteByCode(partCode)).getInfo());
 
-        currentPart = (Part) currentRepo.getPartRemoteByCode(6);
+        currentPart = (Part) currentRepo.getPartRemoteByCode(currentRepo.getAllPartsCodes()[1]);
 
         currentPart.setSubParts(currentSubPartsList);
 

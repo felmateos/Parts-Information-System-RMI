@@ -1,6 +1,7 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,10 +16,11 @@ public class PartRepositoryImpl implements PartRepository {
         this.name = name;
     }
 
-    public boolean insertPart(int partCode, String partName, String partDesc, String repoName) throws RemoteException {
+    public boolean insertPart(String partName, String partDesc, String repoName, List<PartQuant> subParts) throws RemoteException {
         waitQueue();
         this.running = true;
-        boolean r = allParts.add(new PartImpl(partCode, partName, partDesc, repoName));
+        boolean r = this.allParts.add(new PartImpl(partName, partDesc, repoName, subParts));
+        //Collections.sort(allParts);
         this.running = false;
         return r;
     }

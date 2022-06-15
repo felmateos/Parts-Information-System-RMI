@@ -33,9 +33,9 @@ public class Server {
     private static void repoSample(PartRepository repo, int i) {
         try {
 
-            repo.insertPart(i+0, "peca "+(i+0), "eh uma peca", repo.getName());
-            repo.insertPart(i+1, "peca "+(i+1), "eh uma peca", repo.getName());
-            repo.insertPart(i+2, "peca "+(i+2), "eh uma peca", repo.getName());
+            repo.insertPart("peca x", "eh uma peca", repo.getName(), null);
+            repo.insertPart("peca y", "eh uma peca", repo.getName(), null);
+            repo.insertPart("peca z", "eh uma peca", repo.getName(), null);
 
             List<PartQuant> subs = new LinkedList<>();
 
