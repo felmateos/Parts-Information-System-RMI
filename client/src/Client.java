@@ -25,7 +25,7 @@ public class Client {
     private static void executeClient() throws RemoteException {
         running = true;
         System.out.println("Ola! Este eh um sistema de informacoes de pecas distribuido.");
-        System.out.println("Caso precise de ajuda digite \"help\".");
+        System.out.println("Caso precise de ajuda digite \"help\" sem as aspas.");
         while (running) {
             try {
                 String action = "";
@@ -55,7 +55,24 @@ public class Client {
     }
 
     private static void help() {
-        System.out.println("help commands");
+        System.out.println("Comandos disponíveis:\n"
+        +" Obs.: Ao utilizar os comandos abaixo desconsidere as aspas.\n\n"
+        +" BIND: Usado para se conectar a um repositorio de um servidor.\n"
+        +"  Sintaxe: bind \"nomeDoServidor\" \"porta\"\n\n"
+        +" LISTP: Lista as pecas do repositorio atual e suas respectivas informacoes.\n"
+        +"  Sintaxe: listp\n\n"
+        +" GETP: Armazena a referencia de uma peca do repositorio atual em \"pecaAtual\", busca feita pelo codigo da peca.\n"
+        +"  Sintaxe: getp \"codigoDaPeca\"\n\n"
+        +" SHOWP: Exibe as informacoes da peca obtida com ao comando anterior.\n"
+        +"  Sintaxe: showp\n\n"
+        +" CLIST: Limpa a lista \"subPecas\" contidas no cliente.\n"
+        +"  Sintaxe: clist\n\n"
+        +" ADDSUBP: Adiciona certa quantidade da peca atual na lista \"subPecas\".\n"
+        +"  Sintaxe: addsubp \"qunatidade\"\n\n"
+        +" ADDP: Adiciona uma peca ao repositorio atual, a lista \"subPecas\" eh usada como lista de subpecas da peca inserida.\n"
+        +"  Sintaxe: addp \"nomeDaPeca\" \"descricaoDaPeca\"\n\n"
+        +" QUIT: Termina as operacoes e o processo cliente.\n"
+        +"  Sintaxe: quit");
     }
 
     private static void bind(String repoName, int port) {
