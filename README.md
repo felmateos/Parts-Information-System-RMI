@@ -1,0 +1,1 @@
+Sistema distribuido de informações sobre peças ou componentes (Parts), que utiliza RMI para permitir comunicacao entre o processos Client e Server.
