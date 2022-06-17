@@ -58,21 +58,33 @@ public class PartImpl implements Part {
         return r;
     }
 
-    public String getInfo() throws RemoteException {
+    public String getInfo(boolean singlePart) throws RemoteException {
         waitQueue();
         running = true;
-        String subParts = "";
-        if (this.subParts != null) {
-            for (PartQuant pq : this.subParts) {
-                subParts += "[" +pq.getPart().getPartCode() + "," + pq.getPart().getRepoName() + "," + pq.getQuant() + "] ";
-            }
-        }
+        String subParts = " Não possui sub-pecas";
+        String header = "";
+        if (singlePart) header = "==============================================================================================\n\nInfos da peca escolhida:\n\n";
+        if (this.subParts != null && !this.subParts.isEmpty()) subParts = getSubsInfo();
         running = false;
-        return ("   " + this.partCode + 
-                "   |" + this.partName + 
-                "| " + this.partDesc + 
-                " |    " + this.repoName +
-                "    | " + subParts);
+        return (header 
+                + "Código: " + this.partCode
+                + "\nNome: " + this.partName
+                + "\nDescricao: "+this.partDesc
+                + "\nRepositorio: " + this.repoName
+                + "\nLista de sub-pecas:" + subParts
+                + "\n==============================================================================================");
+    }
+
+    private String getSubsInfo() throws RemoteException {
+        String subsInfos = "";
+        for (PartQuant pq : this.subParts) {
+            subsInfos += "\n\n  Código: " + pq.getPart().getPartCode()
+            + "\n  Nome: " + pq.getPart().getPartName()
+            + "\n  Descricao: "+pq.getPart().getPartDesc()
+            + "\n  Repositorio: " + pq.getPart().getRepoName()
+            + "\n  Quantidade: " + pq.getQuant();
+        }
+        return subsInfos;
     }
 
     public static int generateUniqueId() throws RemoteException{      

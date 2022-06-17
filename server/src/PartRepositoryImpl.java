@@ -1,7 +1,6 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,19 +19,18 @@ public class PartRepositoryImpl implements PartRepository {
         waitQueue();
         this.running = true;
         boolean r = this.allParts.add(new PartImpl(partName, partDesc, repoName, subParts));
-        //Collections.sort(allParts);
         this.running = false;
         return r;
     }
 
-    public int[] getAllPartsCodes() throws RemoteException {
+    public String getAllPartsInfos() throws RemoteException {
         waitQueue();
-        this.running = true;
-        int[] b = new int[this.allParts.size()];
-        for (int i = 0; i < this.allParts.size(); i++)
-            b[i] = this.allParts.get(i).getPartCode();
-        this.running = false;
-        return b;
+        running = true;
+        String infos = "==============================================================================================\n\nInfos de todas as pecas:\n\n";
+        for (Part p : this.allParts)
+            infos += p.getInfo(false) + "\n";
+        running = false;
+        return infos;
     }
 
     public Remote getPartRemoteByCode(int partCode) throws RemoteException {
@@ -51,12 +49,6 @@ public class PartRepositoryImpl implements PartRepository {
         }
         this.running = false;
         return null;
-    }
-
-
-    //serializa Part p dar certo
-    public List<Part> getAllParts() throws RemoteException {
-        return allParts;
     }
 
     public int getPartsQuant() throws RemoteException {
