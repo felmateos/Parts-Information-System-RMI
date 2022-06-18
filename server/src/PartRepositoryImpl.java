@@ -10,9 +10,11 @@ public class PartRepositoryImpl implements PartRepository {
     private Part exportedPart = null;
     private String name;
     private boolean running = false;
+    private int serverId = 0;
 
     PartRepositoryImpl(String name) throws RemoteException {
         this.name = name;
+        this.serverId = Integer.parseInt(name.split(" ")[1]);
     }
 
     public boolean insertPart(String partName, String partDesc, String repoName, List<PartQuant> subParts) throws RemoteException {
@@ -26,9 +28,9 @@ public class PartRepositoryImpl implements PartRepository {
     public String getAllPartsInfos() throws RemoteException {
         waitQueue();
         running = true;
-        String infos = "==============================================================================================\n\nInfos de todas as pecas:\n\n";
+        String infos = "";
         for (Part p : this.allParts)
-            infos += p.getInfo(false) + "\n";
+            infos += p.getInfo() + "\n";
         running = false;
         return infos;
     }
@@ -41,7 +43,7 @@ public class PartRepositoryImpl implements PartRepository {
             if(p.getPartCode() == partCode) {
                 try {
                     if (exportedPart != null) exportedPart.unexportPart();
-                    exportedPart = (Part) UnicastRemoteObject.exportObject(p, 3000);
+                    exportedPart = (Part) UnicastRemoteObject.exportObject(p, 3000 + serverId);
                 } catch (RemoteException re) { System.out.println(re); }
                 this.running = false;
                 return exportedPart;

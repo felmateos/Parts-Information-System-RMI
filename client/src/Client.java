@@ -44,7 +44,7 @@ public class Client {
                     case CLIST   -> clearList();
                     case ADDSUBP -> addSubPart(Integer.parseInt(actionSplitSpace[1]));
                     case ADDP    -> addPart(actionSplit[1], actionSplit[3]);
-                    case QUIT    -> running = false;
+                    case QUIT    -> quit();
                 }
 
             } catch (Exception e) {
@@ -55,7 +55,8 @@ public class Client {
 
     private static void help() {
         System.out.println("Comandos disponíveis:\n"
-        +" Obs.: Ao utilizar os comandos abaixo desconsidere as aspas.\n\n"
+        +" Obs.: As aspas duplas nos comandos BIND e ADDP sao obrigatorias,"
+        +" \nenquanto as aspas simples nos demais comandos devem ser omitidas.\n\n"
         +" BIND: Usado para se conectar a um repositorio de um servidor.\n"
         +"  Sintaxe: bind \"nome do servidor\"\n\n"
         +" LISTP: Lista as pecas do repositorio atual e suas respectivas informacoes.\n"
@@ -76,8 +77,9 @@ public class Client {
 
     private static void bind(String repoName) {
         try {
-            
-            Registry remoteRegistry = LocateRegistry.getRegistry(host, 5000);
+
+            int serverPort = 5000 + Integer.parseInt(repoName.split(" ")[1]);
+            Registry remoteRegistry = LocateRegistry.getRegistry(host, serverPort);
             currentRepo = (PartRepository) remoteRegistry.lookup(repoName);
             System.out.println("repositorio atual: " + currentRepo.getName() + " qtd. de pecas: " + currentRepo.getPartsQuant());
             
@@ -87,26 +89,42 @@ public class Client {
     }
 
     private static void listp() throws RemoteException {
-        System.out.println(currentRepo.getAllPartsInfos());
+        String header = "=============================================================================================="
+        +"\n\nInfos de todas as pecas:\n\n";
+        String infos = currentRepo.getAllPartsInfos();
+        System.out.println(infos == "" ?
+         "Repositorio vazio" : header+infos);
     }
 
     private static void getp(int partCode) throws RemoteException {
         currentPart = (Part) currentRepo.getPartRemoteByCode(partCode);
+        System.out.println(currentPart != null ?
+         "Peca obtida com sucesso! Codigo: " + partCode : "Não foi possível obter a peca de codigo: " + partCode);
     }
 
     private static void showp() throws RemoteException {
-        System.out.println(currentPart.getInfo(true));
+        String header = "=============================================================================================="
+        +"\n\nInfos da peca escolhida:\n\n";
+        System.out.println(currentPart != null ?
+         header + currentPart.getInfo() : "Peca invalida!");
     }
 
     private static void clearList() {
         currentSubPartsList.clear();
+        System.out.println("Lista de sub-pecas esta limpa.");
     }
 
     private static void addSubPart(int quant) throws RemoteException {
-        currentSubPartsList.add((PartQuant) currentPart.createPartQuantRemote(quant));
+        System.out.println(currentSubPartsList.add((PartQuant) currentPart.createPartQuantRemote(quant)) ?
+         "Sub-peca adicionada com sucesso!" : "Ocorreu um erro.");
     }
 
-    private static void addPart(String partName, String partDesc) throws RemoteException{
-        currentRepo.insertPart(partName, partDesc, currentRepo.getName(), currentSubPartsList);
+    private static void addPart(String partName, String partDesc) throws RemoteException {
+        System.out.println(currentRepo.insertPart(partName, partDesc, currentRepo.getName(), currentSubPartsList) ?
+         "Peca adicionada com sucesso!" : "Ocorreu um erro.");
+    }
+
+    private static void quit() {
+        System.out.println("Tchau!");
     }
 }

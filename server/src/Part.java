@@ -13,6 +13,6 @@ interface Part extends Remote, Serializable {
     Remote createPartQuantRemote(int quant) throws RemoteException;
     boolean setSubParts(List<PartQuant> subParts) throws RemoteException;
     boolean unexportPart() throws RemoteException;
-    String getInfo(boolean singlePart) throws RemoteException;
+    String getInfo() throws RemoteException;
     
 }
