@@ -126,5 +126,6 @@ public class Client {
 
     private static void quit() {
         System.out.println("Tchau!");
+        running = false;
     }
 }
