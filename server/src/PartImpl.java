@@ -12,7 +12,7 @@ public class PartImpl implements Part {
     private String repoName;
     private List<PartQuant> subParts;
     private boolean running = false;
-    private int serverId;
+    private int serverId = 0;
 
     PartImpl(String partName, String partDesc, String repoName, List<PartQuant> subParts) throws RemoteException {
         this.partCode = generateUniqueId();
